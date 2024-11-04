@@ -24,27 +24,25 @@ Chai Aur Code - Hitesh Chaudhary Backend Series
 
 ## Day-1  Project Setup -- (4/11/2024)
 
- 
- 
+### Npm Packages Uses In Frontend
+- react router 
+- redux toolkit
+- tanstack query
+- axios
 
-### Installation
-1. Clone this repository.
-    ```bash
-    git clone https://github.com/your-username/your-repo-name.git
-    ```
-2. Install dependencies.
-    ```bash
-    npm install
-    ```
-3. Set up environment variables:
-    - **API_KEY**: Your API key for video processing (if applicable)
-    - **DB_URI**: Database connection string
-    - **JWT_SECRET**: Secret key for authentication
+### Npm Packages Uses in Backend
+ - express 
+ - mongoose - help to interact with db
+ - nodemon - to run the server continues
+ - bcrypt - Use for hashing the data mainly password
+ - jsonwebtoken - for cookies generation
+ - dotenv - loads environment variable 
+ - multer - help in uploading 
+ - cloudinary - cloud for storage
+ - cookieParser - use To Perform Crud with cookies
 
-### Running the Project
-```bash
-npm start
-```
+
+
 
 
 

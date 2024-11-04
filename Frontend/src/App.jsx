@@ -1,8 +1,12 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect } from 'react'
 
  const App = () => {
+
   return (
-    <div className='bg-red-600'>App</div>
+   <>
+    <h1>HEY HII !!!</h1>
+   </>
   )
 }
 

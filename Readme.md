@@ -8,6 +8,9 @@ This project is a backend and Frontend implementation for a YouTube-like applica
 Chai Aur Code - Hitesh Chaudhary Backend Series
 - Completed the Series First and then Try Out 
 ## Materials Provide by Sir
+
+- Design of the Youtube Pages is Given with code just make components by analysing the code and use it wisely
+
 - [Figma Design of All Pages Youtube](https://devuiv2.vercel.app/templates/youtube)
 
 - [Model Diagram of Schema](https://app.eraser.io/workspace/YtPqZ1VogxGy1jzIDkzj)
@@ -40,6 +43,16 @@ Chai Aur Code - Hitesh Chaudhary Backend Series
  - multer - help in uploading 
  - cloudinary - cloud for storage
  - cookieParser - use To Perform Crud with cookies
+
+ ### Folders Setup For Backend and Frontend
+ - Backedend - Controllers, Models, Middlewares, DB, Utils, Routes
+ - Frontend - Components , Redux , Queries And Mutations , For Writing Endpoints , Pages
+
+## Day-2 How much Work (5/11/24)
+- Firstly Setup Routes, Redux Store, reactQuery in React
+- Setup dynamic Routing using React Router
+- configure cors, proxy in vite , cookieParser , mongodb
+- make components from the design code given by sir for clone
 
 
 

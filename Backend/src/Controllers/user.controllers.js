@@ -8,7 +8,6 @@ import { uploadImageOnCloudinary } from "../utils/cloudinary.js"
 const registerUser = asyncHandler(async (req, res, next) => {
 
     const { username, email, fullname, password } = req.body
-    
 
     const trimmedFields = [username, email, fullname, password].map(field => field.trim());
 

@@ -29,14 +29,5 @@ export const sideBarElements = [
         title : "Suscribers",
         svg : "./Logo/suscribers.svg",
     },
-    // {
-    //     id : 7,
-    //     title : "Support",
-    //     svg : "./Logo/support.svg",
-    // },
-    // {
-    //     id : 8,
-    //     title : "Setting",
-    //     svg : "./Logo/setting.svg",
-    // },
+    
 ]

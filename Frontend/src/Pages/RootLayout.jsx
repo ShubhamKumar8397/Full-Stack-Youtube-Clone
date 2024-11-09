@@ -6,16 +6,16 @@ import { Outlet } from 'react-router-dom'
 
 const RootLayout = () => {
 
-    
+
     return (
         <>
             <div className="h-screen overflow-y-auto bg-[#121212] text-white">
                 <Header />
-                <Sidebar/>
+                <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
+                    <Sidebar />
+                </div>
+
             </div>
-
-
-
 
         </>
     )

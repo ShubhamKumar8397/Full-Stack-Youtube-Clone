@@ -3,10 +3,10 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { uploadImageOnCloudinary } from "../utils/cloudinary.js"
+import fs from "fs"
 
 
 const registerUser = asyncHandler(async (req, res, next) => {
-
     const { username, email, fullname, password } = req.body
 
     const trimmedFields = [username, email, fullname, password].map(field => field.trim());
@@ -22,16 +22,21 @@ const registerUser = asyncHandler(async (req, res, next) => {
             $or: [{ username }, { email }]
         }
     )
-    console.log(user)
+    // console.log(user)
 
     if (user) {
-        throw new ApiError(401, "User Already Existed With this Username and Password")
+       if(user){
+        fs.unlinkSync(req.files?.avatar[0].path)
+        fs.unlinkSync(req.files?.coverImage[0].path)
+       }
+        throw new ApiError(400, "With this Email or Username User Already Exists")
     }
 
     const avatarFilePath = req.files?.avatar[0].path
 
 
     let coverImageFilePath;
+    let coverImageUrl;
     if (req.files.coverImage &&
         req.files.coverImage.length &&
         Array.isArray(req.files.coverImage)) {
@@ -39,13 +44,14 @@ const registerUser = asyncHandler(async (req, res, next) => {
     }
 
     if (!avatarFilePath) {
-        throw new ApiError(401, "Avatar Image Not Found")
+        throw new ApiError.json(401, "Avatar Image Not Found")
     }
 
 
     const avatarUrl = await uploadImageOnCloudinary(avatarFilePath)
-    const coverImageUrl = await uploadImageOnCloudinary(coverImageFilePath)
-
+    if(coverImageFilePath){
+         coverImageUrl = await uploadImageOnCloudinary(coverImageFilePath)
+    }
     const createdUser = await User.create(
         {
             username,
@@ -56,13 +62,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
                 id : avatarUrl.public_id
             },
             coverImage : {
-                url : coverImageUrl.url,
-                id: coverImageUrl.public_id
+                url : coverImageUrl?.url || "",
+                id: coverImageUrl?.public_id || ""
             },
             password
         }
     )
-
 
     return res.status(200).json(
         new ApiResponse(

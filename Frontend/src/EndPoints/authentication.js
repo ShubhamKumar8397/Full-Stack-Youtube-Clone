@@ -21,7 +21,18 @@ const createAccount = async (formData) => {
 }
 
 
+const checkUsernameAvailable = async (username) => {
+    console.log(username)
+    try {
+        const response = await api.post('/usernameAvailable', {username})
+        console.log(response.data.data)
+        return response.data.data
+    } catch (error) {
+        
+    }
+}
 
 
 
-export {api, createAccount}
+
+export {api, createAccount, checkUsernameAvailable}

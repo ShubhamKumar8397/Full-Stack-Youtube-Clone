@@ -19,9 +19,9 @@ const verifyJWt = async (req, _, next) => {
                 404 , "Token is Expired or unautorized Req"
             )
         }
-
         req.user = user
         next()
+        
     } catch (error) {
         throw new ApiError(404, error?.message || "invalid access token")
     }

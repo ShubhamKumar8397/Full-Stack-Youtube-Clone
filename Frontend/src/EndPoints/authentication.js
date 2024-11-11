@@ -6,7 +6,6 @@ const api = axios.create({
 });
 
 const createAccount = async (formData) => {
-    console.log(formData)
     try {
         const response = await api.post('/registerUser', formData, {
             headers: {
@@ -14,25 +13,32 @@ const createAccount = async (formData) => {
                 'Accept': 'application/json', // Ensure the client expects JSON in response
             }
         } )
-        console.log(response)
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-const checkUsernameAvailable = async (username) => {
-    console.log(username)
-    try {
-        const response = await api.post('/usernameAvailable', {username})
-        console.log(response.data.data)
         return response.data.data
     } catch (error) {
-        
+        throw error.response.data
+    }
+}
+
+const loginUser = async (data) => {
+    try {
+        const response = await api.post('/loginUser', data)
+        return response.data.data
+    } catch (error) {
+        throw error.response.data
+    }
+}
+
+const checkUsernameAvailable = async (username) => {
+    
+    try {
+        const response = await api.post('/usernameAvailable', {username})
+        return response.data.data
+    } catch (error) {
+        throw error.response.data
     }
 }
 
 
 
 
-export {api, createAccount, checkUsernameAvailable}
+export {api, createAccount, loginUser, checkUsernameAvailable}

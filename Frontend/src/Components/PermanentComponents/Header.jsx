@@ -1,6 +1,12 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
+
+    const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+
+
     return (
         <>
             <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
@@ -14,13 +20,31 @@ const Header = () => {
                             <img className='w-5' src="./Logo/searchlogo.svg" alt="" />
                         </span>
                     </div>
-                    
 
-                    <button className="hidden w-full bg-[#383737] px-3 py-2  hover:bg-[#4f4e4e] md:w-auto md:bg-transparent md:block">Log in</button>
-                    <button
-                        className="hidden mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] md:block md:w-auto">
-                        Sign up
-                    </button>
+
+                    {
+                        !isAuthenticated && (
+                            <>
+                                <Link to={'/signin'}>
+                                    <button className="hidden w-full bg-[#383737] px-3 py-2  hover:bg-[#4f4e4e] md:w-auto md:bg-transparent md:block">
+                                        Log in
+                                    </button>
+                                </Link>
+                                <Link to={'/signup'}>
+                                    <button
+                                        className="hidden mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] md:block md:w-auto">
+                                        Sign up
+                                    </button>
+                                </Link>
+                            </>
+                        )
+                    }
+
+                    {
+                        isAuthenticated && (
+                            <button>Logout</button>
+                        )
+                    }
 
 
                     <button className="ml-auto md:hidden">

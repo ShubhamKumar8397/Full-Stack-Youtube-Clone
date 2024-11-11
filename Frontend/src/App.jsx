@@ -1,8 +1,9 @@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import Home from './Pages/Home'
-
 import { Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import RootLayout from './Pages/RootLayout'
 import AuthLayout from './AuthenticationPages/AuthLayout'
 import Signup from './AuthenticationPages/Signup'
@@ -12,19 +13,39 @@ const App = () => {
 
   return (
 
-    <Routes>
+    <>
+      <Routes>
+        
+        <Route element={<AuthLayout />}>
+          <Route path={'/signin'} element={<Signin />} />
+          <Route path={'/signup'} element={<Signup />} />
+        </Route>
 
-      <Route element={<AuthLayout />}>
-        <Route path={'/signin'} element={<Signin />} />
-        <Route path={'/signup'} element={<Signup />} />
-      </Route>
+        <Route element={<RootLayout />}>
+          <Route path={'/'} element={<Home />} />
+        </Route>
+      </Routes>
 
-      <Route element={<RootLayout />}>
 
-      </Route>
-    </Routes>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition:Bounce
+      />
+
+    </>
 
   )
+
+
 }
 
 

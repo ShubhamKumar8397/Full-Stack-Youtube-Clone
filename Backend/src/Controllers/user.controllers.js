@@ -30,15 +30,16 @@ const generateRefreshAndAccessToken = async (userId) => {
     }
 
 }
+
 const registerUser = asyncHandler(async (req, res, next) => {
     const { username, email, fullname, password } = req.body
 
     const trimmedFields = [username, email, fullname, password].map(field => field.trim());
 
     if (trimmedFields.some(cur => cur === "")) {
-        throw new ApiError(
-            400, "All fields are required"
-        );
+        return res.status(401).json(
+            new ApiError(401, "All Fields Are Required")
+        )
     }
 
     const user = await User.findOne(
@@ -46,16 +47,20 @@ const registerUser = asyncHandler(async (req, res, next) => {
             $or: [{ username }, { email }]
         }
     )
-    // console.log(user)
-
-    console.log(req.files)
 
     if (user) {
         if (user) {
             fs.unlinkSync(req.files?.avatar[0].path)
-            fs.unlinkSync(req.files?.coverImage[0].path)
+            if(req.files.coverImage &&
+                req.files.coverImage.length &&
+                Array.isArray(req.files.coverImage)){
+                    fs.unlinkSync(req.files?.coverImage[0].path)
+                }
         }
-        throw new ApiError(400, "With this Email or Username User Already Exists")
+
+        return res.status(401).json(
+            new ApiError(401, "User Already Exits With This Username or Email")
+        )
     }
 
     const avatarFilePath = req.files?.avatar[0].path
@@ -70,7 +75,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
     }
 
     if (!avatarFilePath) {
-        throw new ApiError.json(401, "Avatar Image Not Found")
+        return res.status(404).json(
+            new ApiError(404, "Avatar Image Not Found")
+        )
     }
 
 
@@ -112,13 +119,16 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 
     const { username, email, password } = req.body
-
     if (!(username || email)) {
-        throw new ApiError(404, "All fields Required")
+        return res.status(401).json(
+            new ApiError(401, "All Fields Required")
+        )
     }
 
     if (!password) {
-        throw new ApiError(404, "Password Field is Empty")
+        return res.status(401).json(
+            new ApiError(401, "Password is Required")
+        )
     }
 
     const user = await User.findOne({
@@ -126,13 +136,17 @@ const loginUser = asyncHandler(async (req, res, next) => {
     })
 
     if (!user) {
-        throw new ApiError(401, "With this Email or Password no user found")
+        return res.status(401).json(
+            new ApiError(401, "With This Email or Username No User Found")
+        )
     }
 
     const isPasswordCorrect = await user.isPasswordCorrect(password)
 
     if (!isPasswordCorrect) {
-        throw new ApiError(401, "Password Entered is Wrong")
+        return res.status(401).json(
+            new ApiError(401, "Password is Incorrect")
+        )
     }
 
     const { refreshToken, accessToken } = await generateRefreshAndAccessToken(user._id)
@@ -259,8 +273,6 @@ const checkUsernameAvailable = asyncHandler(async(req, res, next) => {
         )
     }
 })
-
-
 
 
 export {

@@ -2,16 +2,18 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+
 const Header = () => {
 
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    
 
 
     return (
         <>
             <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
                 <nav className="mx-auto flex max-w-7xl items-center py-2">
-                    <img className='w-14' src="./Logo/tubelogo.svg" alt="" />
+                    <img className='w-14' src="./Public/Logo/tubelogo.svg" alt="" />
                     <div className="relative mx-auto hidden w-full max-w-md overflow-hidden md:block">
                         <input
                             className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"

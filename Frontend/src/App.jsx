@@ -8,6 +8,9 @@ import RootLayout from './Pages/RootLayout'
 import AuthLayout from './AuthenticationPages/AuthLayout'
 import Signup from './AuthenticationPages/Signup'
 import Signin from './AuthenticationPages/Signin'
+import EditProfileChannel from './Pages/EditProfileChannel';
+import { EditChannelInformation, PersonalInfomation } from './Components';
+import { ChangePassword } from './Pages';
 
 const App = () => {
 
@@ -22,7 +25,13 @@ const App = () => {
         </Route>
 
         <Route element={<RootLayout />}>
-          <Route path={'/'} element={<Home />} />
+          <Route path='/' element={<Home/>} />
+
+          <Route path='/:username' element={<EditProfileChannel/>}>
+            <Route path='/:username/edit-personal' element={<PersonalInfomation/>} />
+            <Route path='/:username/edit-channel' element={<EditChannelInformation/>}/>
+            <Route path='/:username/edit-password' element={<ChangePassword/>}/>
+          </Route>
         </Route>
       </Routes>
 

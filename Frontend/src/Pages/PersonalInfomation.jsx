@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import EditInput from './EditInput';
-
+import { EditInput } from '../Components';
+import { useUpdatePersonalDetails } from '../ReactQueryAndMutations/AuthenticationQueries';
+import { toast } from 'react-toastify'
 
 const PersonalInfomation = () => {
 
     const [formData, setFormData] = useState("");
+
+
+    const {mutateAsync: updatePersonalDetails, isLoading} = useUpdatePersonalDetails()
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -16,10 +20,30 @@ const PersonalInfomation = () => {
         })
     }
 
-    const handlePersonalEdit = (event) => {
-        event.preventDefault()
-        console.log(formData)
+    const handlePersonalEdit = async (event) => {
+        try {
+            event.preventDefault()
+            if(!formData.firstName && !formData.lastName && !formData.email){
+                toast.error("Required All Fields")
+                return false
+            }
+
+            const fullName = formData.firstName + " " + formData.lastName
+            formData.fullname = fullName,
+            delete formData.firstName 
+            delete formData.lastName
+    
+            const response = await updatePersonalDetails(formData)
+            toast.success("Details Updated Successfully")
+            console.log(response)
+            setFormData("")
+
+        } catch (error) {
+            toast.error(error.message)
+            console.log(error)
+        }
     }
+
 
 
 
@@ -57,7 +81,16 @@ const PersonalInfomation = () => {
                     <hr className="border border-gray-300" />
                     <div className="flex items-center justify-end gap-4 p-4">
                         <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
-                        <button type='Submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">Save changes</button>
+                        <button type='submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
+                            {isLoading? 
+                            <div className='flex gap-2'>
+                                <img src="../Public/Logo/loading.svg" alt="" /> 
+                                Saving Changes..
+                            </div>
+                            : "Save Changes" }
+                        </button>
+                        
+
                     </div>
                 </div>
             </form>

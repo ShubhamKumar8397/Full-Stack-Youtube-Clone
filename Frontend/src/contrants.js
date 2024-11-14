@@ -2,32 +2,32 @@ export const sideBarElements = [
     {
         id : 1,
         title : "Home",
-        svg : "./Logo/home.svg",
+        svg : "../Public/Logo/home.svg",
     },
     {
         id : 2,
         title : "Liked Videos",
-        svg : "./Logo/liked.svg",
+        svg : "../Public/Logo/liked.svg",
     },
     {
         id : 3,
         title : "History",
-        svg : "./Logo/history.svg",
+        svg : "../Public/Logo/history.svg",
     },
     {
         id : 4,
         title : "My Content",
-        svg : "./Logo/content.svg",
+        svg : "../Public/Logo/content.svg",
     },
     {
         id : 5,
         title : "Collections",
-        svg : "./Logo/collections.svg",
+        svg : "../Public/Logo/collections.svg",
     },
     {
         id : 6,
         title : "Suscribers",
-        svg : "./Logo/suscribers.svg",
+        svg : "../Public/Logo/suscribers.svg",
     },
     
 ]

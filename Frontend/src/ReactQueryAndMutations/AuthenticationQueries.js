@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { createAccount, loginUser } from "../EndPoints/authentication"
+import { changePassword, createAccount, loginUser, updateChannelInformation, updatePersonalInformation } from "../EndPoints/authentication"
 
 
 // const queryClient = useQueryClient();
@@ -14,5 +14,23 @@ export const useCreateAccountMutation = () => {
 export const useLoginAccountMutation = () => {
     return useMutation({
         mutationFn : (data) => loginUser(data)
+    })
+}
+
+export const useUpdatePersonalDetails = () => {
+    return useMutation({
+        mutationFn : (data) => updatePersonalInformation(data)
+    })
+}
+
+export const useUpdateChannelDetails = () => {
+    return useMutation({
+        mutationFn : (data) => updateChannelInformation(data)
+    })
+}
+
+export const useChangePassword = () => {
+    return useMutation({
+        mutationFn : (data) => changePassword(data)
     })
 }

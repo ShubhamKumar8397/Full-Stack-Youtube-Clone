@@ -39,6 +39,41 @@ const checkUsernameAvailable = async (username) => {
 }
 
 
+const updatePersonalInformation = async (data) => {
+    
+    try {
+        const response = await api.post('/updatePersonalDetails', data)
+        return response.data.data
+    } catch (error) {
+        throw error.response.data
+    }
+}
 
+const updateChannelInformation = async (data) => {
+    try {
+        const response = await api.post('/updateChannelDetails', data)
+        return response.data.data
+    } catch (error) {
+        throw error.response.data
+    }
+}
 
-export {api, createAccount, loginUser, checkUsernameAvailable}
+const changePassword = async (data) => {
+    try {
+        const response = await api.post('/changePassword', data)
+        
+        return response.data
+    } catch (error) {
+        throw error.response.data
+    }
+}
+
+export {
+    api, 
+    createAccount, 
+    loginUser, 
+    checkUsernameAvailable, 
+    updatePersonalInformation,
+    updateChannelInformation,
+    changePassword
+}

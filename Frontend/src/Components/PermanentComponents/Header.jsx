@@ -13,13 +13,13 @@ const Header = () => {
         <>
             <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
                 <nav className="mx-auto flex max-w-7xl items-center py-2">
-                    <img className='w-14' src="./Public/Logo/tubelogo.svg" alt="" />
+                    <img className='w-14' src="../Public/Logo/tubelogo.svg" alt="" />
                     <div className="relative mx-auto hidden w-full max-w-md overflow-hidden md:block">
                         <input
                             className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
                             placeholder="Search" />
                         <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
-                            <img className='w-5' src="./Logo/searchlogo.svg" alt="" />
+                            <img className='w-5' src="../Public/Logo/searchlogo.svg" alt="" />
                         </span>
                     </div>
 
@@ -50,7 +50,7 @@ const Header = () => {
 
 
                     <button className="ml-auto md:hidden">
-                        <img className='w-6 ' src="./Logo/searchlogo.svg" alt="papa" />
+                        <img className='w-6 ' src="../Public/Logo/searchlogo.svg" alt="papa" />
                     </button>
                     <button className="group peer ml-4 flex w-6 shrink-0 flex-wrap gap-y-1.5 md:hidden">
                         <span className="block h-[2px] w-full bg-white group-hover:bg-[#ae7aff]"></span>

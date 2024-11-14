@@ -1,11 +1,14 @@
 import { Router } from "express";
 import { 
+    ChangePassword,
     checkUsernameAvailable,
     getCurrentUser, 
     loginUser, 
     logoutUser, 
     refreshAccessToken, 
-    registerUser } from "../Controllers/user.controllers.js";
+    registerUser, 
+    updateChannelInformation, 
+    updatePersonalDetails} from "../Controllers/user.controllers.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 import { verifyJWt } from "../Middlewares/verifyJwt.js";
 
@@ -33,7 +36,9 @@ route.post('/registerUser',
 
     route.post('/logoutUser', verifyJWt, logoutUser)
     route.get('/getCurrentUser', verifyJWt, getCurrentUser)
-    
+    route.post('/updatePersonalDetails', verifyJWt, updatePersonalDetails)
+    route.post('/updateChannelDetails', verifyJWt, updateChannelInformation)
+    route.post('/changePassword', verifyJWt, ChangePassword)
 
     // additional utils route
 

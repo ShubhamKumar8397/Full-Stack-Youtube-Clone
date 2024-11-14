@@ -16,8 +16,8 @@ const Sidebar = () => {
                             ))
                         }
                         
-                        <SidebarElementButton title={"Setting"} svg={"./Logo/support.svg"} className={"hidden sm:block mt-auto"} />
-                        <SidebarElementButton title={"Support"} svg={"./Logo/support.svg"} className={"hidden sm:block"} />
+                        <SidebarElementButton title={"Setting"} svg={"../Public/Logo/support.svg"} className={"hidden sm:block mt-auto"} />
+                        <SidebarElementButton title={"Support"} svg={"../Public/Logo/support.svg"} className={"hidden sm:block"} />
 
                     </ul>
                 </div>

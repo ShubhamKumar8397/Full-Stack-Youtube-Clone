@@ -5,6 +5,7 @@ import { useCreateAccountMutation } from '../ReactQueryAndMutations/Authenticati
 import { Link, useNavigate } from 'react-router-dom'
 import { checkUsernameAvailable } from '../EndPoints/authentication'
 import { toast } from 'react-toastify'
+import { isValidUsername } from '../Utils/CheckSpecialChar'
 
 const Signup = () => {
 
@@ -37,6 +38,7 @@ const Signup = () => {
             if (usernameCheck) {
                 handleUsernameAvailable()
             }
+            
         }, 500);
 
         return () => clearTimeout(debounceUsernameCheck)
@@ -46,6 +48,12 @@ const Signup = () => {
     const onSubmit = async (data) => {
 
         try {
+            const isValid = isValidUsername(usernameCheck)
+            if(!isValid){
+                toast.error("Username Contains Special Char")
+                return false
+            }
+            
             const formData = new FormData();
             formData.append('fullname', data.fullname);
             formData.append('username', usernameCheck);

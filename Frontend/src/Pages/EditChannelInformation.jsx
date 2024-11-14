@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { timeZoneOptions } from '../contrants'
-import { useParams } from 'react-router-dom'
+import { useUpdateChannelDetails } from '../ReactQueryAndMutations/AuthenticationQueries'
+import { toast } from 'react-toastify'
+import { isValidUsername } from '../Utils/CheckSpecialChar'
 
 const EditChannelInFormation = () => {
 
-
-    const { username } = useParams()
-    console.log(username)
-
+    const {mutateAsync : updateChannelDetails, isLoading} = useUpdateChannelDetails()
     const [formData, setFormData] = useState()
 
     const handleChange = (event) => {
@@ -18,11 +17,27 @@ const EditChannelInFormation = () => {
         })
     }
 
-
-    const handleChannelEdit = (event) => {
-        event.preventDefault()
-
-
+    const handleChannelEdit = async (event) => {
+       try {
+         event.preventDefault()
+         if(!formData.username && !formData.description){
+            toast.error("All Fields Required")
+            return false
+         }
+        const isValid = isValidUsername(formData.username)
+        console.log(isValid)
+        if(!isValid){
+            toast.error("Username Contains @ ")
+            return false
+        }
+         const response = await updateChannelDetails(formData)
+         if(response){
+            toast.success("Details Updated Successfully")
+         }
+         console.log(response)
+       } catch (error) {
+            toast.error(error.message)
+       }
     }
 
 
@@ -86,7 +101,6 @@ const EditChannelInFormation = () => {
                                     <select
                                         onChange={handleChange}
                                         name='timezone'
-
                                         id="timezone"
                                         className="w-full border-r-8 border-transparent bg-black text-white py-1.5 pl-8">
                                         {
@@ -102,7 +116,14 @@ const EditChannelInFormation = () => {
                         <hr className="border border-gray-300" />
                         <div className="flex items-center justify-end gap-4 p-4">
                             <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
-                            <button type='submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">Save changes</button>
+                            <button type='submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
+                            {isLoading? 
+                            <div className='flex gap-2'>
+                                <img src="../Public/Logo/loading.svg" alt="" /> 
+                                Save Changes
+                            </div>
+                            : "Save Changes" }
+                        </button>
                         </div>
                     </div>
                 </form>

@@ -274,6 +274,106 @@ const checkUsernameAvailable = asyncHandler(async(req, res, next) => {
     }
 })
 
+const updatePersonalDetails = asyncHandler(async(req, res, next) => {
+    const {fullname, email} = req.body
+
+    if(!fullname && !email) {
+        return res.status(404).json(
+            new ApiError(404, "All Fields Required")
+        )
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set : {
+                fullname,
+                email
+            }
+        },
+        {
+            new : true
+        }
+    ).select( "-password")
+
+    return res.status(200).json(
+        new ApiResponse(200, {fullname : user.fullname, email : user.email}, "Information Updated Successfully")
+    )
+
+})
+
+const updateChannelInformation = asyncHandler(async(req, res) => {
+    const {username, description} = req.body
+    if(!username && !description){
+        return res.status(404).json(
+            new ApiError(401, "All Fields Required")
+        )
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set : {
+                username,
+                userChannelDescription : description
+            }
+        },
+        {
+            new : true
+        }
+    )
+
+    if(!user){
+        return res.staus(501).json(
+            new ApiError(501, "Server Error! Information Not Update")
+        )
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {username: user.username, description : user.userChannelDescription}, "iInformation Updated Successfully")
+    )
+})
+
+const ChangePassword = asyncHandler(async(req, res) => {
+    const {currentPassword, newPassword, confirmPassword} = req.body
+
+    if(!currentPassword && !newPassword && !confirmPassword){
+        return res.status(401).json(
+            new ApiError(401, "All Fields Required")
+        )
+    }
+
+    if(newPassword != confirmPassword){
+        return res.status(401).json(
+            new ApiError(401, "Confirm Password is Different")
+        )
+    }
+
+    const user = await User.findById(req.user._id)
+    const isPasswordCorrect =  await user.isPasswordCorrect(currentPassword)
+
+    if(!isPasswordCorrect){
+        return res.status(401).json(
+            new ApiError(401, "Password Entered Wrong")
+        )
+    }
+
+    user.password = newPassword;
+    const changePassword = await user.save()
+
+
+    if(!ChangePassword){
+        return res.status(501).json(
+            new ApiError(501, "Server Error!!")
+        )
+    }
+
+    return res.status(201).json(
+        new ApiResponse(201, {}, "Password Change Successfully")
+    )
+})
+
+
 
 export {
     registerUser,
@@ -281,5 +381,9 @@ export {
     logoutUser,
     getCurrentUser,
     refreshAccessToken,
-    checkUsernameAvailable
+    checkUsernameAvailable,
+    updatePersonalDetails,
+    updateChannelInformation,
+    ChangePassword
+
 }

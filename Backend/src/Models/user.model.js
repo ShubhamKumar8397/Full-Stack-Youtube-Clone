@@ -46,13 +46,15 @@ const userSchema = new Schema({
     refreshToken : {
         type : String
     },
+    userChannelDescription:{
+        type : String
+    }
     
 },{timestamps:true})
 
 
 userSchema.pre('save', async function(next){
     if(!this.isModified("password")) return next()
-    console.log(`the password coming is ${this.password}`)
     this.password = await bcrypt.hash(this.password, 10)
     next();
 })

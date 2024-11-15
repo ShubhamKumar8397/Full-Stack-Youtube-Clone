@@ -3,11 +3,14 @@ import {
     ChangePassword,
     checkUsernameAvailable,
     getCurrentUser, 
+    getUserChannelProfile, 
     loginUser, 
     logoutUser, 
     refreshAccessToken, 
     registerUser, 
+    updateAvatar, 
     updateChannelInformation, 
+    updatecoverImage, 
     updatePersonalDetails} from "../Controllers/user.controllers.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 import { verifyJWt } from "../Middlewares/verifyJwt.js";
@@ -39,6 +42,15 @@ route.post('/registerUser',
     route.post('/updatePersonalDetails', verifyJWt, updatePersonalDetails)
     route.post('/updateChannelDetails', verifyJWt, updateChannelInformation)
     route.post('/changePassword', verifyJWt, ChangePassword)
+    route.patch('/updateAvatar', verifyJWt, 
+        upload.single('avatar'),
+        updateAvatar)
+
+    route.patch('/updateCoverImage', verifyJWt, 
+        upload.single('coverImage'),
+        updatecoverImage)
+
+    route.get('/getChannelProfile', verifyJWt, getUserChannelProfile)
 
     // additional utils route
 

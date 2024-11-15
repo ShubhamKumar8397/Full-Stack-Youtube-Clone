@@ -19,8 +19,10 @@ app.use(bodyParser.json({type: 'application/*+json'}))
 // Routes:::
 
 import userRouter from "./src/Routes/user.routes.js"
+import subscriptionRouter from "./src/Routes/subscription.routes.js"
 
 app.use("/v1/api/users" , userRouter)
+app.use("/v1/api/subscription", subscriptionRouter)
 
 
 

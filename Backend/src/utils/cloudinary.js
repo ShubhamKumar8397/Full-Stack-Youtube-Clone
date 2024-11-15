@@ -12,7 +12,6 @@ cloudinary.config({
 
 const uploadImageOnCloudinary = async (filePath) => {
     try {
-        console.log(`file path in cloudinary is - ${filePath}`)
         if(!filePath) throw new ApiError(401, "filepath not received To cloudinary")
         const uploadResult = await cloudinary.uploader.upload(filePath)
         fs.unlinkSync(filePath)

@@ -2,9 +2,11 @@ import { User } from "../Models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
-import { uploadImageOnCloudinary } from "../utils/cloudinary.js"
+import { deleteImagesFromCloudinary, uploadImageOnCloudinary } from "../utils/cloudinary.js"
 import jwt from "jsonWebToken"
 import fs from "fs"
+
+
 
 
 const generateRefreshAndAccessToken = async (userId) => {
@@ -373,6 +375,220 @@ const ChangePassword = asyncHandler(async(req, res) => {
     )
 })
 
+const updateAvatar = asyncHandler(async(req, res) => {
+    if(!req.file){
+        return res.status(400).json(
+            new ApiError(400, "Avatar Image Not Received")
+        )
+    }
+
+try {
+    
+    const user = await User.findById(req.user._id)
+    const oldImageId = user?.avatar.id
+    if(!user){
+        return res.status(400).json(
+            new ApiError(400, "Invalid Req Please Login Again")
+        )
+    }
+
+    const avatar = await uploadImageOnCloudinary(req.file.path)
+    if(!avatar){
+        return res.status(501).json(
+            new ApiError(501, "Server Error!! during Uploading")
+        )
+    }
+
+    user.avatar = {url : avatar.url , id : avatar.public_id}
+    const updatedUser = await user.save({validateBeforeSave : false})
+
+    if(!updatedUser){
+        return res.status(501).json(
+            new ApiError(501, "Server Error Not update")
+        )
+    }
+
+    const deleteResult = await deleteImagesFromCloudinary([oldImageId])
+    console.log(deleteResult)
+    
+    return res.status(200).json(
+        new ApiResponse(200, {}, "Avatar Successfully Updated")
+    )
+    
+} catch (error) {
+    await deleteImagesFromCloudinary([avatar.public_id])
+    fs.unlink(req.file?.path)
+    return res.status(400).json(
+        new ApiError(400, error?.message)
+    )
+}
+
+})
+
+const updatecoverImage = asyncHandler(async(req, res) => {
+    if(!req.file){
+        return res.status(400).json(
+            new ApiError(400, "Avatar Image Not Received")
+        )
+    }
+
+try {
+    
+    const user = await User.findById(req.user._id)
+    const oldImageId = user?.coverImage?.id
+    if(!user){
+        return res.status(400).json(
+            new ApiError(400, "Invalid Req Please Login Again")
+        )
+    }
+
+    const coverImage = await uploadImageOnCloudinary(req.file.path)
+    if(!coverImage){
+        return res.status(501).json(
+            new ApiError(501, "Server Error!! during Uploading")
+        )
+    }
+
+    user.coverImage = {url : coverImage.url , id : coverImage.public_id}
+    const updatedUser = await user.save({validateBeforeSave : false})
+
+    if(!updatedUser){
+        return res.status(501).json(
+            new ApiError(501, "Server Error Not update")
+        )
+    }
+
+    if(oldImageId){
+        const deleteResult = await deleteImagesFromCloudinary([oldImageId])
+    }
+    
+    return res.status(200).json(
+        new ApiResponse(200, {}, "CoverImage Successfully Updated")
+    )
+    
+} catch (error) {
+    await deleteImagesFromCloudinary([coverImage.public_id])
+    fs.unlink(req.file?.path)
+    return res.status(400).json(
+        new ApiError(400, error?.message)
+    )
+}
+
+})
+
+const getUserChannelProfile = asyncHandler(async(req,res) => {
+    const {username} = req.body
+    if(!username?.trim()){
+        return res.status(404).json(
+            new ApiError(401, "Username Not Received in Backedn")
+        )
+    }
+
+    const channel = await User.aggregate([
+        {
+            $match: {
+                username: username?.toLowerCase(),
+            },
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers",
+               
+            },
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscribeTo",
+               
+            },
+        },
+        // {
+        //     $lookup : {
+        //         from : "users",
+        //         localField : "subscribers.subscriber",
+        //         foreignField : "_id",
+        //         as : "SubscriberDetails",
+        //         pipeline : [
+        //             {
+        //                 $project : {
+        //                     fullname : 1
+        //                 }
+        //             }
+        //         ]
+        //     }
+        // },
+        // {
+        //     $lookup : {
+        //         from : "users",
+        //         localField : "subscribeTo.channel",
+        //         foreignField : "_id",
+        //         as : "SubscribeToDetails",
+        //         pipeline: [
+        //             {
+        //                 $project : {
+        //                     fullname : 1
+        //                 }
+        //             }
+        //         ]
+        //     }
+        // },
+        {
+            $addFields: {
+                subscribersCount: { $size: "$subscribers" },
+                channelSubscribeToCount: { $size: "$subscribeTo" },
+                isSubscribedTo: {
+                    $cond: {
+                        if: { $in: [req.user?._id, "$subscribers.subscriber"] },
+                        then: true,
+                        else: false,
+                    },
+                },
+            },
+        },
+        {
+            $project: {
+                fullname: 1,
+                username: 1,
+                subscribersCount: 1,
+                channelSubscribeToCount: 1,
+                isSubscribedTo: 1,
+                avatar: 1,
+                coverImage: 1,
+                email: 1,
+                // SubscriberDetails : 1,
+                // SubscribeToDetails : 1
+                  // Ensure to project subscribers details in the final output
+
+            },
+        },
+    ]);
+    
+   
+    
+    console.log(channel);
+    
+    if (!channel?.length) {
+        throw new ApiError(404, "Channel doesn't exist");
+    }
+    
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            channel[0],
+            "User Channel Fetched Successfully"
+        )
+    );
+})    
+
+
+
+
 
 
 export {
@@ -384,6 +600,8 @@ export {
     checkUsernameAvailable,
     updatePersonalDetails,
     updateChannelInformation,
-    ChangePassword
-
+    ChangePassword,
+    updateAvatar,
+    updatecoverImage,
+    getUserChannelProfile
 }

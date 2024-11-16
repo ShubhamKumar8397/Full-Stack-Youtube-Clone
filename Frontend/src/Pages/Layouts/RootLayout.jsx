@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Sidebar } from '../Components'
+import { Header, Sidebar } from '../../Components'
 import { Outlet } from 'react-router-dom'
 
 

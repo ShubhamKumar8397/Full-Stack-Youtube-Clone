@@ -28,7 +28,9 @@ const generateRefreshAndAccessToken = async (userId) => {
 
         return {refreshToken, accessToken}
     } catch (error) {   
-        throw new ApiError(401, error, error?.message)
+        next(res.status(401).json(
+            new ApiError(401, error, error?.message))
+        ) 
     }
 
 }
@@ -477,12 +479,17 @@ try {
 })
 
 const getUserChannelProfile = asyncHandler(async(req,res) => {
-    const {username} = req.body
+    const {username} = req.params
+
+    console.log(username)
     if(!username?.trim()){
         return res.status(404).json(
             new ApiError(401, "Username Not Received in Backedn")
         )
     }
+
+    // console.log(req.user)
+    // console.log(req.user._id)
 
     const channel = await User.aggregate([
         {
@@ -570,11 +577,10 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
     ]);
     
    
-    
-    console.log(channel);
-    
     if (!channel?.length) {
-        throw new ApiError(404, "Channel doesn't exist");
+        return res.status(400).json(
+            new ApiError(400, "Channel Doesn;t Exists")
+        )
     }
     
     return res.status(200).json(
@@ -585,6 +591,7 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
         )
     );
 })    
+
 
 
 

@@ -1,11 +1,26 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useLogoutUserMutation } from '../../ReactQueryAndMutations/AuthenticationQueries'
+import { toast } from 'react-toastify'
 
 
 const Header = () => {
 
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
+    const user = useSelector(state => state.user.user)
+
+    const {mutateAsync:logoutUser, isLoading, isError, error} = useLogoutUserMutation()
+
+    const handleLogout = async() => {
+        try {
+            const response = await logoutUser()
+            console.log(response)
+            toast.success("Successfully Logout")
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
     
 
 
@@ -42,11 +57,20 @@ const Header = () => {
                         )
                     }
 
+                    
+
                     {
                         isAuthenticated && (
-                            <button>Logout</button>
+                            <>
+                                <button onClick={() => handleLogout()} className=' hidden w-full bg-[#383737] px-3 py-2 mr-4 cursor-pointer  hover:bg-[#4f4e4e] md:w-auto md:bg-transparent md:block' >Logout</button>
+                                <Link to={`/${user.username}`}>
+                                    <img className='w-12 h-12 object-fit border-2 cursor-pointer border-white rounded-full' src={user?.avatar.url} alt="" />
+                                </Link>
+                            </>
                         )
                     }
+
+
 
 
                     <button className="ml-auto md:hidden">

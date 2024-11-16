@@ -28,6 +28,15 @@ const loginUser = async (data) => {
     }
 }
 
+const logoutUser = async (data) => {
+    try {
+        const response = await api.post('/logoutUser')
+        return response
+    } catch (error) {
+        throw error.response
+    }
+}
+
 const checkUsernameAvailable = async (username) => {
     
     try {
@@ -37,7 +46,6 @@ const checkUsernameAvailable = async (username) => {
         throw error.response.data
     }
 }
-
 
 const updatePersonalInformation = async (data) => {
     
@@ -68,6 +76,18 @@ const changePassword = async (data) => {
     }
 }
 
+const getCurrentUser = async () => {
+    try {
+        const response = await api.get('/getCurrentUser')
+        console.log(response.data.data)
+        return response.data.data
+    } catch (error) {
+        throw error
+    }
+}
+
+
+
 export {
     api, 
     createAccount, 
@@ -75,5 +95,7 @@ export {
     checkUsernameAvailable, 
     updatePersonalInformation,
     updateChannelInformation,
-    changePassword
+    changePassword,
+    getCurrentUser,
+    logoutUser
 }

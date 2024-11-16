@@ -14,6 +14,7 @@ import {
     updatePersonalDetails} from "../Controllers/user.controllers.js";
 import { upload } from "../Middlewares/multer.middleware.js";
 import { verifyJWt } from "../Middlewares/verifyJwt.js";
+import { verifyJWTOptional } from "../Middlewares/verifyJWTOptional.js";
 
 const route = Router()
 
@@ -50,7 +51,7 @@ route.post('/registerUser',
         upload.single('coverImage'),
         updatecoverImage)
 
-    route.get('/getChannelProfile', verifyJWt, getUserChannelProfile)
+    route.get('/getChannelProfile/:username',verifyJWTOptional, getUserChannelProfile)
 
     // additional utils route
 

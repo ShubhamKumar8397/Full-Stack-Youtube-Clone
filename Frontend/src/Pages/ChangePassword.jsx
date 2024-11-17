@@ -2,35 +2,37 @@ import React, { useState } from 'react'
 import { EditInput } from '../Components'
 import { useChangePassword } from '../ReactQueryAndMutations/AuthenticationQueries'
 import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const ChangePassword = () => {
 
-
+    const user = useSelector(state => state.user.user)
     const [formData, setFormData] = useState()
-    const {mutateAsync: changePassword, isLoading} = useChangePassword()
+    const { mutateAsync: changePassword, isLoading } = useChangePassword()
 
     const handleChange = (event) => {
-        const {name, value} = event.target 
+        const { name, value } = event.target
         setFormData({
             ...formData,
-            [name] : value
+            [name]: value
         })
     }
 
-    
-    
+
+
     const handleChangePassword = async (event) => {
         try {
             event.preventDefault()
-           
-            if(!formData.currentPassword && !formData.newPassword && !formData.confirmPassword){
+
+            if (!formData.currentPassword && !formData.newPassword && !formData.confirmPassword) {
                 toast.error("All Fields Required")
                 return false
             }
-            
-            const {currentPassword, newPassword, confirmPassword} = formData
 
-            if(newPassword != confirmPassword){
+            const { currentPassword, newPassword, confirmPassword } = formData
+
+            if (newPassword != confirmPassword) {
                 toast.error("New and Confirm Password is Different")
                 return false
             }
@@ -38,7 +40,7 @@ const ChangePassword = () => {
             const response = await changePassword(formData)
             console.log(response)
             toast.success("Password Change Successfully")
-        
+
         } catch (error) {
             toast.error(error.message)
             console.log(error)
@@ -55,7 +57,7 @@ const ChangePassword = () => {
             </div>
             <div className="w-full sm:w-1/2 lg:w-2/3">
                 <form className="rounded-lg border" onSubmit={handleChangePassword}>
-                    <div  className="flex flex-wrap gap-y-4 p-4">
+                    <div className="flex flex-wrap gap-y-4 p-4">
 
                         <EditInput onChange={handleChange} name={"currentPassword"} label={"Current Password"} />
                         <EditInput onChange={handleChange} name={"newPassword"} label={"New Password"} />
@@ -64,14 +66,16 @@ const ChangePassword = () => {
                     </div>
                     <hr className="border border-gray-300" />
                     <div className="flex items-center justify-end gap-4 p-4">
-                        <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
+                        <Link to={`/${user.username}`}>
+                            <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
+                        </Link>
                         <button type='submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
-                            {isLoading? 
-                            <div className='flex gap-2'>
-                                <img src="../Public/Logo/loading.svg" alt="" /> 
-                                change Password
-                            </div>
-                            : "Change Password" }
+                            {isLoading ?
+                                <div className='flex gap-2'>
+                                    <img src="../Public/Logo/loading.svg" alt="" />
+                                    change Password
+                                </div>
+                                : "Change Password"}
                         </button>
                     </div>
                 </form>

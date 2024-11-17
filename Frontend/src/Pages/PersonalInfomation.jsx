@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { EditInput } from '../Components';
 import { useUpdatePersonalDetails } from '../ReactQueryAndMutations/AuthenticationQueries';
+
 import { toast } from 'react-toastify'
 
 const PersonalInfomation = () => {
 
-    const [formData, setFormData] = useState("");
+    const user = useSelector(state => state.user.user)
+    const parts = user.fullname.split(" ")
 
+    const [formData, setFormData] = useState({
+        firstName : parts[0],
+        lastName : parts[1] || "",
+        email : user.email
+    })
 
     const {mutateAsync: updatePersonalDetails, isLoading} = useUpdatePersonalDetails()
 
@@ -23,24 +30,27 @@ const PersonalInfomation = () => {
     const handlePersonalEdit = async (event) => {
         try {
             event.preventDefault()
-            if(!formData.firstName && !formData.lastName && !formData.email){
+            if(!formData.firstName && !formData.email){
                 toast.error("Required All Fields")
                 return false
             }
 
-            const fullName = formData.firstName + " " + formData.lastName
+            const fullName = formData.firstName + " " + formData?.lastName
             formData.fullname = fullName,
             delete formData.firstName 
             delete formData.lastName
     
             const response = await updatePersonalDetails(formData)
             toast.success("Details Updated Successfully")
-            console.log(response)
-            setFormData("")
+            setFormData({
+                firstName: response?.fullname.split(" ")[0] || "",
+                lastName: response?.fullname.split(" ")[1] || "",
+                email: response?.email || "",
+            });
 
         } catch (error) {
             toast.error(error.message)
-            console.log(error)
+            
         }
     }
 
@@ -61,6 +71,7 @@ const PersonalInfomation = () => {
                             className={"lg:w-1/2"}
                             name={"firstName"}
                             label={"First Name"}
+                            value={formData.firstName}
                             onChange={handleChange}
                         />
 
@@ -68,19 +79,23 @@ const PersonalInfomation = () => {
                             className={"lg:w-1/2"}
                             name={"lastName"}
                             label={"Last Name"}
+                            value={formData.lastName}
                             onChange={handleChange}
                         />
 
                         <EditInput
                             name={"email"}
                             label={"Email"}
+                            value={formData.email}
                             onChange={handleChange}
                         />
 
                     </div>
                     <hr className="border border-gray-300" />
                     <div className="flex items-center justify-end gap-4 p-4">
-                        <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
+                        <Link to={`/${user.username}`}>
+                            <button  className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
+                        </Link>
                         <button type='submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
                             {isLoading? 
                             <div className='flex gap-2'>

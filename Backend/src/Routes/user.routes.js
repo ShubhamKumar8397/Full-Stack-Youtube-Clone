@@ -40,9 +40,9 @@ route.post('/registerUser',
 
     route.post('/logoutUser', verifyJWt, logoutUser)
     route.get('/getCurrentUser', verifyJWt, getCurrentUser)
-    route.post('/updatePersonalDetails', verifyJWt, updatePersonalDetails)
-    route.post('/updateChannelDetails', verifyJWt, updateChannelInformation)
-    route.post('/changePassword', verifyJWt, ChangePassword)
+    route.patch('/updatePersonalDetails', verifyJWt, updatePersonalDetails)
+    route.patch('/updateChannelDetails', verifyJWt, updateChannelInformation)
+    route.patch('/changePassword', verifyJWt, ChangePassword)
     route.patch('/updateAvatar', verifyJWt, 
         upload.single('avatar'),
         updateAvatar)

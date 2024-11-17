@@ -1,6 +1,6 @@
 import React from 'react'
 
-const EditInput = ({name, label, onChange, className, type="text"}) => {
+const EditInput = ({name, label, onChange, className, type="text", value= ""}) => {
     return (
         <div className={`w-full  lg:pl-2 ${className ? className : "" }`}>
             <label
@@ -9,6 +9,7 @@ const EditInput = ({name, label, onChange, className, type="text"}) => {
                 {label}
             </label>
             <input
+                value={value}
                 onChange={onChange}
                 name= {name}
                 type={type}

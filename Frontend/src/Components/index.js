@@ -3,9 +3,10 @@ import Sidebar from "./PermanentComponents/Sidebar";
 import SidebarElementButton from "./SidebarElementButton";
 import Input from "./Input";
 import EditInput from "./EditInput";
+import ModalForPreviewImage from "./ModalForPreviewImage";
 
 
 
 
 
-export {Header, Sidebar, SidebarElementButton, Input, EditInput}
+export {Header, Sidebar, SidebarElementButton, Input, EditInput, ModalForPreviewImage}

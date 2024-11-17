@@ -3,11 +3,22 @@ import { timeZoneOptions } from '../contrants'
 import { useUpdateChannelDetails } from '../ReactQueryAndMutations/AuthenticationQueries'
 import { toast } from 'react-toastify'
 import { isValidUsername } from '../Utils/CheckSpecialChar'
+import { useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 
 const EditChannelInFormation = () => {
 
-    const {mutateAsync : updateChannelDetails, isLoading} = useUpdateChannelDetails()
-    const [formData, setFormData] = useState()
+    const navigate = useNavigate()
+    const user = useSelector(state => state.user.user)
+    const { mutateAsync: updateChannelDetails, isLoading } = useUpdateChannelDetails()
+    const [formData, setFormData] = useState({
+        username: user.username,
+        description: user.userChannelDescription || ""
+    })
+
+    console.log(user.userChannelDescription)
+
+
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -18,26 +29,32 @@ const EditChannelInFormation = () => {
     }
 
     const handleChannelEdit = async (event) => {
-       try {
-         event.preventDefault()
-         if(!formData.username && !formData.description){
-            toast.error("All Fields Required")
-            return false
-         }
-        const isValid = isValidUsername(formData.username)
-        console.log(isValid)
-        if(!isValid){
-            toast.error("Username Contains @ ")
-            return false
-        }
-         const response = await updateChannelDetails(formData)
-         if(response){
-            toast.success("Details Updated Successfully")
-         }
-         console.log(response)
-       } catch (error) {
+        try {
+            event.preventDefault()
+            if (!formData.username && !formData.description) {
+                toast.error("All Fields Required")
+                return false
+            }
+            const isValid = isValidUsername(formData.username)
+            console.log(isValid)
+            if (!isValid) {
+                toast.error("Username Contains @ ")
+                return false
+            }
+            const response = await updateChannelDetails(formData)
+            if (response) {
+                toast.success("Details Updated Successfully")
+            }
+            setFormData(
+                {
+                    username: response?.username,
+                    description: response?.userChannelDescription || ""
+                }
+            )
+            navigate(`/${response?.username}/edit-channel`)
+        } catch (error) {
             toast.error(error.message)
-       }
+        }
     }
 
 
@@ -61,6 +78,7 @@ const EditChannelInFormation = () => {
                                 <div className="flex rounded-lg border">
                                     <p className="flex shrink-0 items-center border-r border-white px-3 align-middle">vidplay.com/</p>
                                     <input
+                                        value={formData.username}
                                         onChange={handleChange}
                                         name="username"
                                         type="text"
@@ -77,6 +95,7 @@ const EditChannelInFormation = () => {
                                     Description
                                 </label>
                                 <textarea
+                                    value={formData.description}
                                     onChange={handleChange}
                                     name='description'
                                     className="w-full rounded-lg border bg-transparent px-2 py-1.5"
@@ -115,15 +134,17 @@ const EditChannelInFormation = () => {
                         </div>
                         <hr className="border border-gray-300" />
                         <div className="flex items-center justify-end gap-4 p-4">
-                            <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
+                            <Link to={`/${user.username}`}>
+                                <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">Cancel</button>
+                            </Link>
                             <button type='submit' className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
-                            {isLoading? 
-                            <div className='flex gap-2'>
-                                <img src="../Public/Logo/loading.svg" alt="" /> 
-                                Save Changes
-                            </div>
-                            : "Save Changes" }
-                        </button>
+                                {isLoading ?
+                                    <div className='flex gap-2'>
+                                        <img src="../Public/Logo/loading.svg" alt="" />
+                                        Save Changes
+                                    </div>
+                                    : "Save Changes"}
+                            </button>
                         </div>
                     </div>
                 </form>

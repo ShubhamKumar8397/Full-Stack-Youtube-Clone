@@ -9,7 +9,6 @@ import AuthLayout from './AuthenticationPages/AuthLayout'
 import Signup from './AuthenticationPages/Signup'
 import Signin from './AuthenticationPages/Signin'
 import EditProfileChannel from './Pages/Layouts/EditProfileChannel';
-
 import { ChangePassword, EditChannelInFormation, PersonalInfomation } from './Pages';
 import ChannelViewLayout from './Pages/Layouts/ChannelViewLayout';
 import { useGetCurrentUser } from './ReactQueryAndMutations/AuthenticationQueries';
@@ -18,21 +17,17 @@ import { login } from './Redux/ReduxSlice/userSlice';
 
 const App = () => {
 
-  const {mutateAsync:gettingCurrentUser, isLoading} = useGetCurrentUser()
+  const {data:currentUserData, isLoading:gettingCurrentUser, isError, error} = useGetCurrentUser()
   const dispatch = useDispatch()
 
-  const handleGetCurrentUser = async () => {
-      try {
-        const response = await gettingCurrentUser()
-        dispatch(login(response))
-      } catch (error) {
-        console.log(error)
-      }
-  }
-
+  
   useEffect(() => {
-    handleGetCurrentUser()
-  },[])
+    if(currentUserData){
+      dispatch(login(currentUserData))
+    }
+  
+  },[currentUserData])
+ 
 
   return (
 

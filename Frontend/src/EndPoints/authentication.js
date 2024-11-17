@@ -47,28 +47,9 @@ const checkUsernameAvailable = async (username) => {
     }
 }
 
-const updatePersonalInformation = async (data) => {
-    
-    try {
-        const response = await api.post('/updatePersonalDetails', data)
-        return response.data.data
-    } catch (error) {
-        throw error.response.data
-    }
-}
-
-const updateChannelInformation = async (data) => {
-    try {
-        const response = await api.post('/updateChannelDetails', data)
-        return response.data.data
-    } catch (error) {
-        throw error.response.data
-    }
-}
-
 const changePassword = async (data) => {
     try {
-        const response = await api.post('/changePassword', data)
+        const response = await api.patch('/changePassword', data)
         
         return response.data
     } catch (error) {
@@ -79,7 +60,6 @@ const changePassword = async (data) => {
 const getCurrentUser = async () => {
     try {
         const response = await api.get('/getCurrentUser')
-        console.log(response.data.data)
         return response.data.data
     } catch (error) {
         throw error
@@ -93,8 +73,6 @@ export {
     createAccount, 
     loginUser, 
     checkUsernameAvailable, 
-    updatePersonalInformation,
-    updateChannelInformation,
     changePassword,
     getCurrentUser,
     logoutUser

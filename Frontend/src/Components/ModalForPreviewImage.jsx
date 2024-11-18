@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { redirect } from 'react-router-dom'
 
 const ModalForPreviewImage = ({ imageFile, imageFor, cancel, saveChanges, loading }) => {
 

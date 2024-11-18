@@ -20,9 +20,10 @@ app.use(bodyParser.json({type: 'application/*+json'}))
 
 import userRouter from "./src/Routes/user.routes.js"
 import subscriptionRouter from "./src/Routes/subscription.routes.js"
-
+import videoRouter from "./src/Routes/video.routes.js"
 app.use("/v1/api/users" , userRouter)
 app.use("/v1/api/subscription", subscriptionRouter)
+app.use("/v1/api/video", videoRouter)
 
 
 

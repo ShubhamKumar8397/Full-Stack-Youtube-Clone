@@ -12,37 +12,50 @@ cloudinary.config({
 
 const uploadImageOnCloudinary = async (filePath) => {
     try {
-        if(!filePath) throw new ApiError(401, "filepath not received To cloudinary")
+       if(!filePath) throw new ApiError(401, "File Path Not Received")
         const uploadResult = await cloudinary.uploader.upload(filePath)
         fs.unlinkSync(filePath)
         return uploadResult;
     } catch (error) {
-        console.log(`Error During uploading Image ${error?.message}`)
         fs.unlinkSync(filePath)
+        throw new ApiError(
+            error?.status || 501 , error?.message || "Error During Upload", 
+        )
+        
     }
 }
 
 const uploadVideoOnCloudinary = async (filePath) => {
     try {
         if(!filePath) throw new ApiError(401, "filepath not received To cloudinary")
-        const uploadVideo = await cloudinary.uploader.upload_large(filePath, {
+        const uploadVideo = await cloudinary.uploader.upload(filePath, {
             resource_type : "video"
         })
         fs.unlinkSync(filePath)
         return uploadVideo
 
     } catch (error) {
-        console.log(`Error During Uploading Video ${error}`)
         fs.unlinkSync(filePath)
+        throw new ApiError(
+            error?.status || 501 , error?.message || "Error During Upload Vido"
+        )
+       
     }
 }
 
 const deleteImagesFromCloudinary = async ([ids]) => {
     try {
+        if(![ids] && ![ids].length){
+            throw new ApiError(
+                401, "Ids Not send For deletion"
+            )
+        }
         const deleteResult = await cloudinary.api.delete_resources([ids])
         return deleteResult
     } catch (error) {
-        console.log(`Error During delete Images ${error}`)
+        throw new ApiError(
+            error?.status || 501 , error?.message || "Error During Delete Images"
+        )
     }
 }
 
@@ -51,7 +64,9 @@ const deleteVideoFromCloudinary = async(videoId) => {
         const deleteResult = await cloudinary.uploader.destroy(videoId , {resource_type: 'video', invalidate: true, type: 'authenticated'})
         return deleteResult
     } catch (error) {
-        console.log(`Error During Delete the Video ${error}`)
+        throw new ApiError(
+            error?.status || 501 , error?.message || "Error During Delete Video"
+        )
     }
 }
 

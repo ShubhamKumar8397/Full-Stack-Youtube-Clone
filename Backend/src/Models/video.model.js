@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 
-const moreDetails = new Schema({
+const moreDetails = {
     url : {
         type : String,
         required : true,
@@ -9,13 +9,13 @@ const moreDetails = new Schema({
         type : String,
         required : true,
     }
-})
+}
 
 const videoSchema = new Schema({
     videoFile: moreDetails,
     thumbnail : moreDetails,
     owner : {
-        type : Schema.Types.ObjectId(),
+        type : Schema.Types.ObjectId,
         ref : "User"
     },
     title:{
@@ -26,7 +26,7 @@ const videoSchema = new Schema({
     }, 
     description : {
         type : String,
-        requried : true,
+        required : true,
         max : [500, "Description is too Long"]
     },
     duration : {

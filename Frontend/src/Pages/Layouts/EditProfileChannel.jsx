@@ -49,9 +49,6 @@ const EditProfileChannel = () => {
 
     }
 
-    
-
-
     const handleSaveImageChanges = async () => {
         const formData = new FormData();
         setIsLoading(true)
@@ -81,7 +78,6 @@ const EditProfileChannel = () => {
 
     useEffect(() => {
         if (user?.username !== username) {
-            
             return <h1>Dont</h1>
         }
     },[])
@@ -118,7 +114,7 @@ const EditProfileChannel = () => {
                 <div className="flex flex-wrap gap-4 pb-4 pt-6">
                     <div className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2">
                         <img
-                            src={user.avatar.url}
+                            src={user?.avatar.url}
                             alt="Channel"
                             className="h-full w-full object-cover object-center" />
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">

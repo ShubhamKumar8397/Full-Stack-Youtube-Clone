@@ -3,6 +3,7 @@ import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import { deleteImagesFromCloudinary, deleteVideoFromCloudinary, uploadImageOnCloudinary, uploadVideoOnCloudinary } from "../utils/cloudinary.js"
 import { Video } from "../Models/video.model.js"
+import mongoose from "mongoose"
 
 
 
@@ -110,7 +111,10 @@ const publishVideo = asyncHandler(async (req, res, next) => {
 })
 
 const getVideoById = asyncHandler(async (req, res, next) => {
-    const {videoId} = req.params
+    const {videoId} = req.body
+
+    const objectId =  new mongoose.Types.ObjectId(videoId)
+    console.log(objectId)
 
     if(!videoId){
         return res.status(401).json(
@@ -118,6 +122,91 @@ const getVideoById = asyncHandler(async (req, res, next) => {
         )
     }
 
+    const video = await Video.aggregate([
+        {
+            $match : {
+                _id : new mongoose.Types.ObjectId(videoId)
+            }
+        },
+        {
+            $lookup: {
+                from : "users",
+                localField : "owner",
+                foreignField : "_id",
+                as : "owner",
+            }
+        },
+        {
+            $unwind: "$owner"
+        },
+        {
+            $lookup : {
+                from : "subscriptions",
+                localField : "owner._id",
+                foreignField : "channel",
+                as : "subscribers"
+            }
+        },
+        {
+            $addFields : {
+                subscribersCount : {$size : "$subscribers"},
+                isSubscribedTo : {
+                    $cond : {
+                        if : {$in: [req.user._id , "$subscribers.subscribe"]},
+                        then : true,
+                        else : false
+                    }
+                }
+            }
+        },
+        {
+            $lookup : {
+                from : "likes",
+                localField : "_id",
+                foreignField : "video",
+                as : "videoLikes"
+            }
+        },
+        {
+            $addFields : {
+                likesCount : {$size : "$videoLikes"},
+                isLikedTo : {
+                    $cond : {
+                        if : {$in : [req.user._id ,"$videoLikes.likedBy" ]},
+                        then : true,
+                        else : false
+                    }
+                }
+            }
+        },
+        {
+            $project : {
+                videoFile : 1,
+                fullname : 1,
+                username : 1,
+                owner : {
+                    fullname : 1,
+                    username : 1
+                },
+                subscribersCount : 1,
+                isSubscribedTo : 1,
+                likesCount : 1,
+                isLikedTo : 1
+            }
+        }
+    ])
+
+    console.log(video)
+
+    if(!video && !video.length){
+        return res.status(401).json(
+            new ApiError(401, "No Video Found")
+        )
+    }
+
+    return res.status(201).json(
+        new ApiResponse(201, video, "video Fetched Successfully")
+    )
 })
 
 const updateVideo = asyncHandler(async(req, res, next) => {
@@ -263,9 +352,11 @@ const deleteVideo = asyncHandler(async(req, res, next) => {
 
 
 
+
 export {
     publishVideo,
     updateVideo,
+    getVideoById,
     tooglePublishVideo,
     deleteVideo,
 }

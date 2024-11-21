@@ -5,6 +5,10 @@ const subsApi = axios.create({
     baseURL : "/v1/api/subscription"
 })
 
+const videoApi = axios.create({
+    baseURL : "/v1/api/video"
+})
+
 
 const getChannelProfile = async ({username}) => {
     try {
@@ -34,8 +38,20 @@ const unsubscribeChannel = async({username}) => {
 }
 
 
+const getAllVideosOfChannel = async({username}) => {
+    try {
+        console.log(username)
+        const response = await videoApi.get(`/${username}/getAllChannelVideos`)
+        return response.data.data
+    } catch (error) {
+        throw error.response
+    }
+}
+
+
 export {
     getChannelProfile,
     SubscribeChannel,
-    unsubscribeChannel
+    unsubscribeChannel,
+    getAllVideosOfChannel
 }

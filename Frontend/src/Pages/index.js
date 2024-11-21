@@ -3,7 +3,7 @@ import EditProfileChannel from "./Layouts/EditProfileChannel";
 import EditChannelInFormation from "./EditChannelInformation";
 import PersonalInfomation from "./PersonalInfomation";
 import ChangePassword from "./ChangePassword";
-
+import ChannelAllVideos from "./ChannelAllVideos";
 
 
 export {
@@ -12,4 +12,5 @@ export {
     ChangePassword,
     EditChannelInFormation,
     PersonalInfomation,
+    ChannelAllVideos
 }

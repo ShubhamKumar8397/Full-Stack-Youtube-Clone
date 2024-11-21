@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { getChannelProfile, SubscribeChannel, unsubscribeChannel } from "../EndPoints/channel"
+import { getAllVideosOfChannel, getChannelProfile, SubscribeChannel, unsubscribeChannel } from "../EndPoints/channel"
+
 
 
 export const useGetChannelProfile = ({username}) => {
@@ -31,5 +32,12 @@ export const useChannelUnsubscribe = () => {
     })
 }
 
+
+export const useGetChannelAllVideos = ({username}) => {
+    return useQuery({
+        queryKey : ["getAllChannelVideos"],
+        queryFn : () => getAllVideosOfChannel({username})
+    })
+}
 
 

@@ -1,20 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useLogoutUserMutation } from '../../ReactQueryAndMutations/AuthenticationQueries'
 import { toast } from 'react-toastify'
+import { logout } from '../../Redux/ReduxSlice/userSlice'
 
 
 const Header = () => {
 
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
     const user = useSelector(state => state.user.user)
+    const dispatch = useDispatch()
 
     const {mutateAsync:logoutUser, isLoading, isError, error} = useLogoutUserMutation()
 
     const handleLogout = async() => {
         try {
             const response = await logoutUser()
+            dispatch(logout())
             console.log(response)
             toast.success("Successfully Logout")
         } catch (error) {

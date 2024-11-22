@@ -14,6 +14,7 @@ import ChannelViewLayout from './Pages/Layouts/ChannelViewLayout';
 import { useGetCurrentUser } from './ReactQueryAndMutations/AuthenticationQueries';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from './Redux/ReduxSlice/userSlice';
+import Check from './Components/PermanentComponents/Check';
 
 const App = () => {
 
@@ -39,8 +40,11 @@ const App = () => {
           <Route path={'/signup'} element={<Signup />} />
         </Route>
 
+        
+
         <Route element={<RootLayout />}>
           <Route path='/' element={<Home/>} />
+          <Route path='/videoCheck' element={<Check/>}/>
 
           <Route path='/:username' element={<ChannelViewLayout/>}>
             <Route path='/:username/Videos' element={<ChannelAllVideos/>}/>

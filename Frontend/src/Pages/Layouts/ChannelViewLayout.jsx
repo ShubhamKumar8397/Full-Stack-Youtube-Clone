@@ -12,7 +12,7 @@ const ChannelViewLayout = () => {
     const channelPath = [
         {
             title: "Videos",
-            to: ""
+            to: "videos"
         },
         {
             title: "Playlist",

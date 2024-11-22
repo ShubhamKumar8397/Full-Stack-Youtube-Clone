@@ -1,10 +1,12 @@
 import React from 'react'
 import { timeAgo } from '../Utils/changeTimeString'
 import { formatTime } from '../Utils/formatTime'
+import { Link } from 'react-router-dom'
 
 const ChannelVideo = ({video}) => {
     return (
-        <div key={video._id} class="w-full">
+        <Link to={`/video/${video._id}`} key={video._id}>
+            <div  class="w-full">
             <div class="relative mb-2 w-full pt-[56%]">
                 <div class="absolute inset-0">
                     <img
@@ -17,6 +19,7 @@ const ChannelVideo = ({video}) => {
             <h6 class="mb-1 font-semibold">{video.title}</h6>
             <p class="flex text-sm text-gray-200">10.3k Views · {timeAgo(video.createdAt)}</p>
         </div>
+        </Link>
     )
 }
 

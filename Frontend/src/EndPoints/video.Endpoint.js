@@ -1,4 +1,3 @@
-import { focusManager } from "@tanstack/react-query"
 import { videoApi } from "./channel"
 
 const getVideoById = async ({videoId}) => {

@@ -18,10 +18,14 @@ const VideoPlayingPage = () => {
     const { videoId } = useParams()
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
     const user = useSelector(state => state.user.user)
-    
-
 
     const { data: videoData, isLoading: IsplayingVideo } = useGetVideoById({ videoId })
+
+    useEffect(() => {
+        if(videoData){
+            console.log(videoData)
+        }
+    },[])
 
     // handle Like Functions
 
@@ -47,11 +51,13 @@ const VideoPlayingPage = () => {
 
     const handleSubscriptionOfChannel = async () => {
         try {
+            
             if (!isAuthenticated) {
                 toast.warn("Login To Perform")
                 return false;
             }
             if (videoData?.isSubscribedTo) {
+                
                 const response = await unsubscribeChannel({ username: videoData.owner.username })
             } else {
                 const response = await subscribeChannel({ username: videoData.owner.username })
@@ -79,9 +85,6 @@ const VideoPlayingPage = () => {
             
         }
     }
-
-
-
 
 
     return IsplayingVideo ? <h1 className='text-8xl flex justify-center items-center'>Loading</h1>

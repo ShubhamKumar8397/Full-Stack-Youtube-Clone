@@ -38,11 +38,26 @@ const unsubscribeChannel = async({username}) => {
 }
 
 
-const getAllVideosOfChannel = async({username}) => {
+// const getAllVideosOfChannel = async({username}) => {
+//     try {
+//         console.log(username)
+//         const response = await videoApi.get(`/${username}/getAllChannelVideos`)
+//         return response.data.data
+//     } catch (error) {
+//         throw error.response
+//     }
+// }
+
+
+const getAllVideosOfChannel = async({pageParam = 1, username}) => {
     try {
-        console.log(username)
-        const response = await videoApi.get(`/${username}/getAllChannelVideos`)
+
+        const response = await videoApi.get(`/${username}/getAllChannelVideos?page=${pageParam}`, {pageParam},
+            { headers: { 'Content-Type': 'application/json' } }
+        )
+
         return response.data.data
+
     } catch (error) {
         throw error.response
     }

@@ -18,8 +18,10 @@ const allowedMimeTypes = [
 
 
 const getAllChannelVideos = asyncHandler(async (req, res, next) => {
+
     const {username} = req.params
-    const {page, limit} = req.query
+    const {page} = req.query
+    
     if (!username) {
         return res.status(401).json(
             new ApiError(401, "channel Video Not Received For Get videos")
@@ -28,7 +30,7 @@ const getAllChannelVideos = asyncHandler(async (req, res, next) => {
 
     const options = {
         page: page || 1,
-        limit: limit || 5,
+        limit: 5,
         sort : {createdAt : -1},
         customLabels : {
             docs : "videos"
@@ -86,7 +88,6 @@ const getAllChannelVideos = asyncHandler(async (req, res, next) => {
 
 const publishVideo = asyncHandler(async (req, res, next) => {
     const { title, description } = req.body
-    console.log(title, description)
 
     if (!title && !description) {
         return res.status(401).json(
@@ -221,7 +222,7 @@ const getVideoById = asyncHandler(async (req, res, next) => {
                 subscribersCount: { $size: "$subscribers" },
                 isSubscribedTo: {
                     $cond: {
-                        if: { $in: [req.user?._id, "$subscribers.subscribe"] },
+                        if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
                         else: false
                     }

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getAllVideosOfChannel, getChannelProfile, SubscribeChannel, unsubscribeChannel } from "../EndPoints/channel"
 
 
@@ -16,7 +16,8 @@ export const useChannelSubscribe = () => {
     return useMutation({
         mutationFn : ({username}) => SubscribeChannel({username}),
         onSuccess: () => {
-            queryClient.invalidateQueries(["getChannelProfile"],["getVideoById"])
+            queryClient.invalidateQueries(["getChannelProfile"])
+            queryClient.invalidateQueries(["getVideoById"])
         }
     })
 }
@@ -26,17 +27,29 @@ export const useChannelUnsubscribe = () => {
     return useMutation({
         mutationFn : ({username}) => unsubscribeChannel({username}),
         onSuccess : () => {
-            queryClient.invalidateQueries(["getChannelProfile"],["getVideoById"])
+            queryClient.invalidateQueries(["getChannelProfile"])
+            queryClient.invalidateQueries(["getVideoById"])
         }
 
     })
 }
 
 
+// export const useGetChannelAllVideos = ({username}) => {
+//     return useQuery({
+//         queryKey : ["getAllChannelVideos"],
+//         queryFn : () => getAllVideosOfChannel({username})
+//     })
+// }
+
+
 export const useGetChannelAllVideos = ({username}) => {
-    return useQuery({
+    return useInfiniteQuery({
         queryKey : ["getAllChannelVideos"],
-        queryFn : () => getAllVideosOfChannel({username})
+        queryFn : ({pageParam= 1}) => getAllVideosOfChannel({pageParam, username}),
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasNextPage ? lastPage.page + 1 : undefined;
+        }
     })
 }
 

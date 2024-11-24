@@ -7,6 +7,7 @@ const api = axios.create({
 
 const createAccount = async (formData) => {
     try {
+        console.log(formData)
         const response = await api.post('/registerUser', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

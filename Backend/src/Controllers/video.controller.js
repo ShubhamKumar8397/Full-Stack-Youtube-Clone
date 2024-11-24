@@ -86,6 +86,7 @@ const getAllChannelVideos = asyncHandler(async (req, res, next) => {
 
 const publishVideo = asyncHandler(async (req, res, next) => {
     const { title, description } = req.body
+    console.log(title, description)
 
     if (!title && !description) {
         return res.status(401).json(
@@ -108,7 +109,6 @@ const publishVideo = asyncHandler(async (req, res, next) => {
 
 
     const videoFilePath = req.files?.videoFile[0].path
-
 
     if (!videoFilePath) {
         return res.status(401).json(
@@ -180,7 +180,7 @@ const publishVideo = asyncHandler(async (req, res, next) => {
 })
 
 const getVideoById = asyncHandler(async (req, res, next) => {
-    const { videoId } = req.body
+    const { videoId } = req.params
 
     const objectId = new mongoose.Types.ObjectId(videoId)
     console.log(objectId)
@@ -221,7 +221,7 @@ const getVideoById = asyncHandler(async (req, res, next) => {
                 subscribersCount: { $size: "$subscribers" },
                 isSubscribedTo: {
                     $cond: {
-                        if: { $in: [req.user._id, "$subscribers.subscribe"] },
+                        if: { $in: [req.user?._id, "$subscribers.subscribe"] },
                         then: true,
                         else: false
                     }
@@ -241,7 +241,7 @@ const getVideoById = asyncHandler(async (req, res, next) => {
                 likesCount: { $size: "$videoLikes" },
                 isLikedTo: {
                     $cond: {
-                        if: { $in: [req.user._id, "$videoLikes.likedBy"] },
+                        if: { $in: [req.user?._id, "$videoLikes.likedBy"] },
                         then: true,
                         else: false
                     }
@@ -250,12 +250,16 @@ const getVideoById = asyncHandler(async (req, res, next) => {
         },
         {
             $project: {
+                title : 1,
+                description : 1,
                 videoFile: 1,
+                createdAt : 1,
                 fullname: 1,
                 username: 1,
                 owner: {
                     fullname: 1,
-                    username: 1
+                    username: 1,
+                    avatar : 1
                 },
                 subscribersCount: 1,
                 isSubscribedTo: 1,
@@ -274,7 +278,7 @@ const getVideoById = asyncHandler(async (req, res, next) => {
     }
 
     return res.status(201).json(
-        new ApiResponse(201, video, "video Fetched Successfully")
+        new ApiResponse(201, video[0], "video Fetched Successfully")
     )
 })
 

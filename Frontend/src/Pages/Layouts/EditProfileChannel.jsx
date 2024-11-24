@@ -39,7 +39,6 @@ const EditProfileChannel = () => {
     const user = useSelector(state => state.user.user)
 
     const handleImagePreviewModal = (event) => {
-        console.log(event.target.name)
         setSelectedImage(event.target.files[0])
         if (event.target.name == "avatar") {
             setInputImageFor("Avatar")

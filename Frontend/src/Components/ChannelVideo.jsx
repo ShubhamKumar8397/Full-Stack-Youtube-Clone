@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const ChannelVideo = ({video}) => {
     return (
         <Link to={`/video/${video._id}`} key={video._id}>
-            <div  class="w-full">
+            <div  key={video._id} class="w-full">
             <div class="relative mb-2 w-full pt-[56%]">
                 <div class="absolute inset-0">
                     <img

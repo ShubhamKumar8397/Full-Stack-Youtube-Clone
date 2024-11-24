@@ -15,6 +15,8 @@ import { useGetCurrentUser } from './ReactQueryAndMutations/AuthenticationQuerie
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from './Redux/ReduxSlice/userSlice';
 import Check from './Components/PermanentComponents/Check';
+import VideoPlayingPage from './Pages/VideoPlayingPage';
+import UploadVideo from './Pages/UploadVideo';
 
 const App = () => {
 
@@ -44,7 +46,8 @@ const App = () => {
 
         <Route element={<RootLayout />}>
           <Route path='/' element={<Home/>} />
-          <Route path='/videoCheck' element={<Check/>}/>
+          <Route path='/video/:videoId' element={<VideoPlayingPage/>}/>
+          <Route path='/videoUpload' element={<UploadVideo/>} />
 
           <Route path='/:username' element={<ChannelViewLayout/>}>
             <Route path='/:username/Videos' element={<ChannelAllVideos/>}/>

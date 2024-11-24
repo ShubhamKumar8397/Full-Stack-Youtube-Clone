@@ -6,8 +6,10 @@ import EditInput from "./EditInput";
 import ModalForPreviewImage from "./ModalForPreviewImage";
 import ChannelVideo from "./ChannelVideo";
 import SideVideo from "./SideVideo";
+import Comment from "./Comment";
+import VideoPublishEditForm from "./VideoPublishEditForm";
 
 
 
 
-export {Header, Sidebar, SidebarElementButton, Input, EditInput, ModalForPreviewImage, ChannelVideo, SideVideo}
+export {Header, Sidebar, SidebarElementButton, Input, EditInput, ModalForPreviewImage, ChannelVideo, SideVideo, Comment, VideoPublishEditForm}

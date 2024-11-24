@@ -61,7 +61,7 @@ const Signup = () => {
             formData.append('password', data.password);
             formData.append('avatar', avatar)
             formData.append('coverImage', coverImage)
-            console.log(formData)
+            
 
             const response = await createAccount(formData)
             if(response){

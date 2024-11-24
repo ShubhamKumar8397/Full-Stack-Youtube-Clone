@@ -39,17 +39,19 @@ const ChannelViewLayout = () => {
 
     const handleSubscriptionOfChannel = async () => {
         try {
+            console.log("shubham")
             if(!isAuthenticated){
                 toast.warn("Login To Perform")
             }
             if (channel?.isSubscribedTo) {
                 const response = await unsubscribeChannel({ username })
+                console.log(response)
             } else {
                 const response = await subscribeChannel({ username })
 
             }
         } catch (error) {
-            
+            console.log(error)
         }
     }
 

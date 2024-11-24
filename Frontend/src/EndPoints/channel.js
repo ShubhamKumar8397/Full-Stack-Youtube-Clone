@@ -50,6 +50,7 @@ const getAllVideosOfChannel = async({username}) => {
 
 
 export {
+    videoApi,
     getChannelProfile,
     SubscribeChannel,
     unsubscribeChannel,

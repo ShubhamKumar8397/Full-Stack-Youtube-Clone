@@ -25,7 +25,7 @@ route.post("/publishVideo",
 route.patch("/updateVideo", upload.single('thumbnail'), verifyJWt, updateVideo)
 route.patch("/tooglePublishedVideo", verifyJWt, tooglePublishVideo )
 route.delete("/deleteVideo", verifyJWt, deleteVideo )
-route.get("/getVideoById", verifyJWTOptional, getVideoById)
+route.get("/getVideoById/:videoId", verifyJWTOptional, getVideoById)
 route.get("/:username/getAllChannelVideos",verifyJWTOptional, getAllChannelVideos)
 
 

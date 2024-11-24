@@ -6,7 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const toggleVideoLike = asyncHandler(async(req, res, next) => {
 
-    const {videoId} =  req.body
+    const {videoId} =  req.params
 
     if(!videoId){
         return res.status(404).json(

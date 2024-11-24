@@ -22,11 +22,14 @@ import userRouter from "./src/Routes/user.routes.js"
 import subscriptionRouter from "./src/Routes/subscription.routes.js"
 import videoRouter from "./src/Routes/video.routes.js"
 import likeRouter from "./src/Routes/like.routes.js"
+import commnetRouter from "./src/Routes/comment.routes.js"
+
 
 app.use("/v1/api/users" , userRouter)
 app.use("/v1/api/subscription", subscriptionRouter)
 app.use("/v1/api/video", videoRouter)
 app.use("/v1/api/likes", likeRouter)
+app.use("/v1/api/comment", commnetRouter )
 
 
 export {app}

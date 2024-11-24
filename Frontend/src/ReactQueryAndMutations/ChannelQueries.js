@@ -16,7 +16,7 @@ export const useChannelSubscribe = () => {
     return useMutation({
         mutationFn : ({username}) => SubscribeChannel({username}),
         onSuccess: () => {
-            queryClient.invalidateQueries(["getChannelProfile"])
+            queryClient.invalidateQueries(["getChannelProfile"],["getVideoById"])
         }
     })
 }
@@ -26,7 +26,7 @@ export const useChannelUnsubscribe = () => {
     return useMutation({
         mutationFn : ({username}) => unsubscribeChannel({username}),
         onSuccess : () => {
-            queryClient.invalidateQueries(["getChannelProfile"])
+            queryClient.invalidateQueries(["getChannelProfile"],["getVideoById"])
         }
 
     })

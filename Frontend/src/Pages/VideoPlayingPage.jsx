@@ -7,7 +7,7 @@ import { useChannelSubscribe, useChannelUnsubscribe } from '../ReactQueryAndMuta
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { useToggleVideoLike } from '../ReactQueryAndMutations/likeQueries'
-import { useCreateCommentOnVideo } from '../ReactQueryAndMutations/CommentQueries'
+import { useCreateCommentOnVideo, useGetAllVideoComment } from '../ReactQueryAndMutations/CommentQueries'
 
 
 
@@ -19,13 +19,10 @@ const VideoPlayingPage = () => {
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
     const user = useSelector(state => state.user.user)
 
+    // handle videoplaying player data
+
     const { data: videoData, isLoading: IsplayingVideo } = useGetVideoById({ videoId })
 
-    useEffect(() => {
-        if(videoData){
-            console.log(videoData)
-        }
-    },[])
 
     // handle Like Functions
 
@@ -68,6 +65,8 @@ const VideoPlayingPage = () => {
         }
     }
 
+    
+
 
     // handle Doing Comment
 
@@ -75,16 +74,36 @@ const VideoPlayingPage = () => {
     const {mutateAsync:commentOnVideo, isLoading:isCommentPostingLoading} = useCreateCommentOnVideo()
 
     const handleCommentPosting = async() => {
+        if(!commentInput){
+            toast.warn("Comment is Empty")
+            return false
+        }
         try {
+            if (!isAuthenticated) {
+                toast.warn("Login To Perform")
+                return false;
+            }
             const formData = {
                 videoId,
                 content :commentInput
             }
             const response = await commentOnVideo(formData)
+            setCommentInput("")
+
+            if(response){
+                toast.success("Comment Succesfully Added")
+            }
         } catch (error) {
             
         }
     }
+
+
+    //  handle get all Comments
+
+    const {data:allComments, isLoading: gettingComments} = useGetAllVideoComment({videoId})
+
+    
 
 
     return IsplayingVideo ? <h1 className='text-8xl flex justify-center items-center'>Loading</h1>
@@ -110,7 +129,7 @@ const VideoPlayingPage = () => {
                         <div
                             className="group mb-4 w-full rounded-lg border p-4 duration-200 hover:bg-white/5 focus:bg-white/5"
                             role="button"
-                            tabindex="0">
+                            tabIndex="0">
                             <div className="flex flex-wrap gap-y-2">
                                 <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
                                     <h1 className="text-lg font-bold">{videoData.title}</h1>
@@ -203,6 +222,7 @@ const VideoPlayingPage = () => {
                                 <h6 className="mb-4 font-semibold">573 Comments</h6>
                                 <div className='relative'>
                                     <input
+                                        value={commentInput}
                                         onChange={(e) => setCommentInput(e.target.value)}
                                         type="text"
                                         className="w-full rounded-lg border bg-transparent px-2 py-1 placeholder-white"
@@ -211,14 +231,25 @@ const VideoPlayingPage = () => {
                                     <img
                                         onClick={() => handleCommentPosting()}
                                         className='absolute right-3 bottom-[6px] cursor-pointer'
-                                        src="../Public/Logo/send.svg"
+                                        src={isCommentPostingLoading ? "../Public/Logo/loading.svg" : "../Public/Logo/send.svg"}
                                         alt=""
                                     />
                                 </div>
 
                             </div>
                             <hr className="my-4 border-white" />
-                            <Comment />
+
+                            
+                            
+                            {
+                                !gettingComments && (
+                                    allComments.map((cur) => (
+                                        <div key={cur._id}>
+                                            <Comment commentDetails={cur} />
+                                        </div>
+                                    ))
+                                )
+                            }
                         </div>
                     </div>
                     <div className="col-span-12 flex w-full shrink-0 flex-col gap-3 lg:w-[350px] xl:w-[400px]">

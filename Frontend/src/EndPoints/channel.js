@@ -52,12 +52,10 @@ const unsubscribeChannel = async({username}) => {
 const getAllVideosOfChannel = async({pageParam = 1, username}) => {
     try {
 
-        const response = await videoApi.get(`/${username}/getAllChannelVideos?page=${pageParam}`, {pageParam},
+        const response = await videoApi.get(`/${username}/getAllChannelVideos?page=${pageParam}`,
             { headers: { 'Content-Type': 'application/json' } }
         )
-
         return response.data.data
-
     } catch (error) {
         throw error.response
     }

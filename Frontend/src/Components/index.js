@@ -8,8 +8,11 @@ import ChannelVideo from "./ChannelVideo";
 import SideVideo from "./SideVideo";
 import Comment from "./Comment";
 import VideoPublishEditForm from "./VideoPublishEditForm";
+import HomeVideoCard from "./PermanentComponents/HomeVideoCard";
 
 
 
 
-export {Header, Sidebar, SidebarElementButton, Input, EditInput, ModalForPreviewImage, ChannelVideo, SideVideo, Comment, VideoPublishEditForm}
+export {Header, Sidebar, SidebarElementButton, Input, EditInput, ModalForPreviewImage, ChannelVideo, SideVideo, Comment, VideoPublishEditForm,
+    HomeVideoCard
+}

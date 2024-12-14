@@ -1,6 +1,7 @@
 import React from 'react'
 import { sideBarElements } from '../../contrants'
 import {SidebarElementButton} from '../index.js'
+import { Link } from 'react-router-dom'
 
 
 const Sidebar = () => {
@@ -11,7 +12,9 @@ const Sidebar = () => {
                     <ul className="flex justify-around gap-y-2 sm:sticky sm:top-[106px] sm:min-h-[calc(100vh-130px)] sm:flex-col">
                         {
                             sideBarElements?.map((cur) => (
-                                <SidebarElementButton key={cur.id} title={cur.title} svg={cur.svg} />
+                               <Link key={cur.id} to={cur.to}>
+                                 <SidebarElementButton key={cur.id} title={cur.title} svg={cur.svg} />
+                               </Link>
 
                             ))
                         }

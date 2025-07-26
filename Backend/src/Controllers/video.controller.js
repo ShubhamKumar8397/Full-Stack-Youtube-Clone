@@ -17,6 +17,73 @@ const allowedMimeTypes = [
 ];
 
 
+const getAllVideosForHomePage = asyncHandler(async(req, res,next) => {
+
+    const {page} = req.query
+
+    const options = {
+        page: page || 1,
+        limit: 16,
+        sort : {createdAt : -1},
+        customLabels : {
+            docs : "videos"
+        }
+    };
+
+    const pipeline = [
+        {
+            $lookup : {
+                from : "users",
+                localField : "owner",
+                foreignField : "_id",
+                as : "owner"
+            }
+        },
+        {
+            $addFields : {
+                owner: { $arrayElemAt: ["$owner", 0] }
+            }
+        },
+        {
+            $project : {
+                _id: 1,
+                title: 1,
+                thumbnail : 1,
+                duration : 1,
+                createdAt : 1,
+                owner : {
+                    _id : 1,
+                    username : 1,
+                    fullname : 1,
+                    avatar : 1,
+                }
+            }
+        }
+    ]
+
+
+    Video.aggregatePaginate(pipeline, options, function(err, results){
+        if(err) {
+            return res.status(err?.status || 501).json(
+                new ApiError(err.status || 501 , err.message || "During aggregate pagination")
+            )
+        } else {
+            if(!results.videos && !results.videos.length){
+                return res.status(200).json(
+                    new ApiResponse(200, {}, "No Videos Uploaded On This Website")
+                )
+            }else{
+                return res.status(200).json(
+                    new ApiResponse(200, results, "Fetched Successfully")
+                )
+            }
+        }
+    })
+
+
+    
+})
+
 const getAllChannelVideos = asyncHandler(async (req, res, next) => {
 
     const {username} = req.params
@@ -434,5 +501,6 @@ export {
     getVideoById,
     tooglePublishVideo,
     deleteVideo,
+    getAllVideosForHomePage
 
 }

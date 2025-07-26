@@ -19,6 +19,11 @@ const VideoPlayingPage = () => {
     const isAuthenticated = useSelector(state => state.user.isAuthenticated)
     const user = useSelector(state => state.user.user)
 
+    useEffect(() => {
+        
+        window.scrollTo(0, 0); // Scroll to the top of the page
+    }, []);
+
     // handle videoplaying player data
 
     const { data: videoData, isLoading: IsplayingVideo } = useGetVideoById({ videoId })

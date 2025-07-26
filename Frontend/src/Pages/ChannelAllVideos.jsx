@@ -10,8 +10,6 @@ const ChannelAllVideos = () => {
   const { ref, inView } = useInView()
   const { data, isFetching, hasNextPage, fetchNextPage, isFetched } = useGetChannelAllVideos({ username })
 
- 
-
 
   useEffect(() => {
     if (inView && hasNextPage) {

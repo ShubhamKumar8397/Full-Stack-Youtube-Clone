@@ -9,7 +9,7 @@ import AuthLayout from './AuthenticationPages/AuthLayout'
 import Signup from './AuthenticationPages/Signup'
 import Signin from './AuthenticationPages/Signin'
 import EditProfileChannel from './Pages/Layouts/EditProfileChannel';
-import { ChangePassword, ChannelAllVideos, EditChannelInFormation, PersonalInfomation } from './Pages';
+import { ChangePassword, ChannelAllVideos, EditChannelInFormation, LikedVideosPage, PersonalInfomation } from './Pages';
 import ChannelViewLayout from './Pages/Layouts/ChannelViewLayout';
 import { useGetCurrentUser } from './ReactQueryAndMutations/AuthenticationQueries';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,6 +46,8 @@ const App = () => {
 
         <Route element={<RootLayout />}>
           <Route path='/' element={<Home/>} />
+          <Route path="/liked-videos" element={<LikedVideosPage/>}/>
+          
           <Route path='/video/:videoId' element={<VideoPlayingPage/>}/>
           <Route path='/videoUpload' element={<UploadVideo/>} />
 

@@ -3,31 +3,37 @@ export const sideBarElements = [
         id : 1,
         title : "Home",
         svg : "../Public/Logo/home.svg",
+        to : "/"
     },
     {
         id : 2,
         title : "Liked Videos",
         svg : "../Public/Logo/liked.svg",
+        to : "/liked-videos"
     },
     {
         id : 3,
         title : "History",
         svg : "../Public/Logo/history.svg",
+        to : "/history"
     },
     {
         id : 4,
         title : "My Content",
         svg : "../Public/Logo/content.svg",
+        to : "/my-content"
     },
     {
         id : 5,
         title : "Collections",
         svg : "../Public/Logo/collections.svg",
+        to : "/collections"
     },
     {
         id : 6,
         title : "Suscribers",
         svg : "../Public/Logo/suscribers.svg",
+        to : "/subscribers"
     },
     
 ]

@@ -4,6 +4,7 @@ import EditChannelInFormation from "./EditChannelInformation";
 import PersonalInfomation from "./PersonalInfomation";
 import ChangePassword from "./ChangePassword";
 import ChannelAllVideos from "./ChannelAllVideos";
+import LikedVideosPage from "./LikedVideosPage";
 
 
 export {
@@ -12,5 +13,6 @@ export {
     ChangePassword,
     EditChannelInFormation,
     PersonalInfomation,
-    ChannelAllVideos
+    ChannelAllVideos,
+    LikedVideosPage
 }
